@@ -50,7 +50,7 @@ L'équipe ajoute des **réalisations** (pharmacie, ville, prestations, photos) e
    - Authorization callback URL : `https://api.netlify.com/auth/done`
    - Copier le *Client ID* et générer un *Client secret*.
 4. **Netlify** : *Site configuration → Access & security → OAuth → Install provider → GitHub*, coller le Client ID et le Client secret.
-5. Dans `admin/config.yml`, remplacer `VOTRE-COMPTE-GITHUB/diaw-design-deco` par `compte/dépôt` réel, et `site_url` par l'adresse du site. Envoyer ce fichier modifié sur GitHub.
+5. `admin/config.yml` pointe sur le dépôt `PAPEADIAW/diawdesigndeco` et le site `https://diawdesigndeco.netlify.app` (à modifier si l'un des deux change).
 6. **Équipe** : sur GitHub, *dépôt → Settings → Collaborators → Add people* (accès en écriture). Chaque personne crée son compte GitHub gratuit.
 7. Se connecter sur `https://adresse-du-site/admin/` avec « Se connecter avec GitHub ».
 

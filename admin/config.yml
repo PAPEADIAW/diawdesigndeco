@@ -4,7 +4,7 @@
 
 backend:
   name: github
-  repo: PAPEADIAW/diaw-design-deco
+  repo: PAPEADIAW/diawdesigndeco
   branch: main
   commit_messages:
     create: "Ajout : {{collection}} « {{slug}} »"
@@ -17,7 +17,7 @@ backend:
 local_backend: true
 
 locale: fr
-site_url: https://diawdesigndeco.netlify.app        # ← à remplacer par l'adresse réelle du site
+site_url: https://diawdesigndeco.netlify.app
 logo_url: /assets/img/logo/logo.png
 
 # Photos envoyées depuis l'administration
