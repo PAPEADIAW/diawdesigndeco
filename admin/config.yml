@@ -4,7 +4,7 @@
 
 backend:
   name: github
-  repo: VOTRE-COMPTE-GITHUB/diaw-design-deco   # ← à remplacer par le dépôt réel (compte/nom)
+  repo: PAPEADIAW/diaw-design-deco
   branch: main
   commit_messages:
     create: "Ajout : {{collection}} « {{slug}} »"
