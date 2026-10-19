@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E2E2E"/><stop offset="1" stop-color="#1F2121"/></linearGradient>
+    <pattern id="d" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#2B9942" fill-opacity=".25"/></pattern>
+    <pattern id="l" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2.5" fill="#D9FBE1"/></pattern>
+    <filter id="b" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="26"/></filter>
+    <clipPath id="c"><path d="M365 200h70v65h65v70h-65v65h-70v-65h-65v-70h65z"/></clipPath>
+  </defs>
+  <rect width="800" height="600" fill="url(#g)"/>
+  <rect width="800" height="600" fill="url(#d)"/>
+  <path d="M365 200h70v65h65v70h-65v65h-70v-65h-65v-70h65z" fill="#2B9942" opacity=".8" filter="url(#b)"/>
+  <path d="M365 200h70v65h65v70h-65v65h-70v-65h-65v-70h65z" fill="#2B9942"/>
+  <g clip-path="url(#c)"><rect x="290" y="190" width="220" height="220" fill="url(#l)" opacity=".8"/></g>
+  <text x="400" y="525" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="20" fill="#FFFFFF" fill-opacity=".6" letter-spacing="3">PHOTO À REMPLACER</text>
+</svg>

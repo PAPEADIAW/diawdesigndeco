@@ -1,0 +1,152 @@
+{
+  "realisations": [
+    {
+      "slug": "fleuve-nouvelle",
+      "nom": "Pharmacie du Fleuve Nouvelle",
+      "ville": "",
+      "annee": "",
+      "categories": ["enseigne", "croix", "facade"],
+      "prestations": ["Habillage façade", "Lettres lumineuses", "Croix LED", "Totem"],
+      "description": "Habillage de façade en panneaux composite cuivrés, nom en lettres rétroéclairées et totem lumineux.",
+      "aConfirmer": false,
+      "photos": [
+        { "image": "assets/img/realisations/facade-fleuve-nouvelle-l.jpg", "legende": "Façade de nuit : lettres rétroéclairées, croix LED et totem" }
+      ]
+    },
+    {
+      "slug": "adja-daba-diagne",
+      "nom": "Pharmacie Adja Daba Diagne",
+      "ville": "",
+      "annee": "",
+      "categories": ["enseigne", "croix", "facade"],
+      "prestations": ["Enseigne d'angle", "Croix LED", "Bandeau de façade"],
+      "description": "Enseigne lumineuse déroulée sur les deux façades d'angle, croix LED et spots en sous-face.",
+      "aConfirmer": false,
+      "photos": [
+        { "image": "assets/img/realisations/facade-adja-daba-diagne-l.jpg", "legende": "Façade d'angle de nuit" }
+      ]
+    },
+    {
+      "slug": "faa-ikhal-makhis",
+      "nom": "Pharmacie Faa Ikhal Makhis",
+      "ville": "",
+      "annee": "",
+      "categories": ["enseigne", "croix", "facade"],
+      "prestations": ["Habillage façade", "Lettres lumineuses", "Croix LED", "Totem"],
+      "description": "Façade verte, bandeau anthracite à lettres lumineuses, croix LED et totem d'accueil.",
+      "aConfirmer": false,
+      "photos": [
+        { "image": "assets/img/realisations/facade-faa-ikhal-makhis-l.jpg", "legende": "Façade : bandeau, croix LED et totem" }
+      ]
+    },
+    {
+      "slug": "officine-lames-bois",
+      "nom": "Officine à lames bois et suspensions LED",
+      "ville": "",
+      "annee": "",
+      "categories": ["complet", "mobilier", "enseigne"],
+      "prestations": ["Agencement complet", "Comptoirs", "Linéaires", "Lettrages"],
+      "description": "Bardage à lames bois, comptoirs alignés, linéaire parapharmacie et podium central.",
+      "aConfirmer": true,
+      "photos": [
+        { "image": "assets/img/realisations/parapharmacie-podium-2-l.jpg", "legende": "Linéaire parapharmacie et podium central" },
+        { "image": "assets/img/realisations/officine-comptoirs-bois-l.jpg", "legende": "Comptoirs à lames bois et suspensions LED" }
+      ]
+    },
+    {
+      "slug": "officine-faux-plafond-noir",
+      "nom": "Officine faux plafond noir et gondoles",
+      "ville": "",
+      "annee": "",
+      "categories": ["complet", "mobilier"],
+      "prestations": ["Agencement complet", "Gondoles", "Comptoirs", "Espace d'attente"],
+      "description": "Faux plafond noir à bandeaux lumineux, gondoles double face, comptoirs et espace d'attente.",
+      "aConfirmer": true,
+      "photos": [
+        { "image": "assets/img/realisations/gondoles-attente-2-l.jpg", "legende": "Gondoles, comptoirs et espace d'attente" },
+        { "image": "assets/img/realisations/comptoirs-gondoles-l.jpg", "legende": "Comptoirs et gondoles" },
+        { "image": "assets/img/realisations/entree-espace-attente-l.jpg", "legende": "Entrée et espace d'attente" }
+      ]
+    },
+    {
+      "slug": "officine-mur-vegetal",
+      "nom": "Officine au mur végétal",
+      "ville": "",
+      "annee": "",
+      "categories": ["complet", "mobilier", "enseigne"],
+      "prestations": ["Agencement complet", "Linéaires", "Comptoirs", "Signalétique"],
+      "description": "Linéaires bois, bandeau de signalétique noir, comptoirs et mur végétal.",
+      "aConfirmer": true,
+      "photos": [
+        { "image": "assets/img/realisations/parapharmacie-mur-vegetal-l.jpg", "legende": "Parapharmacie, comptoirs et mur végétal" },
+        { "image": "assets/img/realisations/lineaires-faux-plafond-noir-l.jpg", "legende": "Linéaires et comptoirs sous faux plafond noir" }
+      ]
+    },
+    {
+      "slug": "officine-comptoirs-croix",
+      "nom": "Officine aux comptoirs motif croix",
+      "ville": "",
+      "annee": "",
+      "categories": ["complet", "mobilier"],
+      "prestations": ["Comptoirs", "Linéaires", "Luminaires en croix"],
+      "description": "Comptoirs blancs à croix en relief, linéaires orange et luminaires en forme de croix.",
+      "aConfirmer": true,
+      "photos": [
+        { "image": "assets/img/realisations/comptoirs-motif-croix-l.jpg", "legende": "Comptoirs motif croix et luminaires en croix" }
+      ]
+    },
+    {
+      "slug": "officine-comptoirs-blancs",
+      "nom": "Officine aux comptoirs blancs et bois gris",
+      "ville": "",
+      "annee": "",
+      "categories": ["mobilier", "enseigne"],
+      "prestations": ["Comptoirs", "Gondoles", "Signalétique par rayon"],
+      "description": "Comptoirs blancs à bandeau bois gris, signalétique par famille de produits, gondole bucco-dentaire.",
+      "aConfirmer": true,
+      "photos": [
+        { "image": "assets/img/realisations/comptoirs-blancs-signaletique-l.jpg", "legende": "Comptoirs et signalétique par rayon" },
+        { "image": "assets/img/realisations/comptoirs-blancs-gondole-l.jpg", "legende": "Comptoirs, luminaires suspendus et gondole" }
+      ]
+    },
+    {
+      "slug": "officine-comptoirs-bois-orthopedie",
+      "nom": "Officine comptoirs bois et orthopédie",
+      "ville": "",
+      "annee": "",
+      "categories": ["mobilier"],
+      "prestations": ["Comptoirs", "Linéaires", "Gondole"],
+      "description": "Comptoirs bois à panneaux noirs, colonne Orthopédie, linéaires muraux éclairés.",
+      "aConfirmer": true,
+      "photos": [
+        { "image": "assets/img/realisations/comptoirs-bois-orthopedie-l.jpg", "legende": "Comptoirs bois et linéaires" }
+      ]
+    },
+    {
+      "slug": "officine-colonne-vegetale",
+      "nom": "Officine à la colonne végétale",
+      "ville": "",
+      "annee": "",
+      "categories": ["mobilier"],
+      "prestations": ["Comptoirs", "Linéaires", "Faux plafond"],
+      "description": "Colonne végétale, linéaire bucco-dentaire, comptoir bois et façon marbre.",
+      "aConfirmer": true,
+      "photos": [
+        { "image": "assets/img/realisations/colonne-vegetale-comptoir-l.jpg", "legende": "Colonne végétale et comptoir" }
+      ]
+    },
+    {
+      "slug": "officine-lineaires-bois-verre",
+      "nom": "Officine linéaires bois et verre",
+      "ville": "",
+      "annee": "",
+      "categories": ["mobilier"],
+      "prestations": ["Linéaires", "Comptoirs", "Plafond lumineux"],
+      "description": "Linéaires bois et verre, comptoirs et plafond lumineux, photographiés avant la mise en rayon.",
+      "aConfirmer": true,
+      "photos": [
+        { "image": "assets/img/realisations/lineaires-bois-verre-l.jpg", "legende": "Avant mise en rayon" }
+      ]
+    }
+  ]
+}

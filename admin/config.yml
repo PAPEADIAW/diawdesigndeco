@@ -1,0 +1,195 @@
+# Decap CMS — espace d'administration de diawdesigndeco
+# Les modifications sont enregistrées dans le dépôt GitHub du site ;
+# Netlify republie le site automatiquement après chaque enregistrement (1 à 2 minutes).
+
+backend:
+  name: github
+  repo: VOTRE-COMPTE-GITHUB/diaw-design-deco   # ← à remplacer par le dépôt réel (compte/nom)
+  branch: main
+  commit_messages:
+    create: "Ajout : {{collection}} « {{slug}} »"
+    update: "Mise à jour : {{collection}} « {{slug}} »"
+    delete: "Suppression : {{collection}} « {{slug}} »"
+    uploadMedia: "Photo ajoutée : {{path}}"
+    deleteMedia: "Photo supprimée : {{path}}"
+
+# Test en local sans GitHub : lancer « npx decap-server » à la racine, puis ouvrir http://localhost:xxxx/admin/
+local_backend: true
+
+locale: fr
+site_url: https://diawdesigndeco.netlify.app        # ← à remplacer par l'adresse réelle du site
+logo_url: /assets/img/logo/logo.png
+
+# Photos envoyées depuis l'administration
+media_folder: assets/img/uploads
+public_folder: /assets/img/uploads
+
+collections:
+  # ------------------------------------------------------------------
+  - name: realisations
+    label: Réalisations
+    description: "Pharmacies réalisées : elles apparaissent dans la galerie de l'accueil (10 par filtre) et ont chacune leur album."
+    editor: { preview: false }
+    files:
+      - name: liste
+        label: Liste des pharmacies réalisées
+        file: data/realisations.json
+        fields:
+          - name: realisations
+            label: Pharmacies
+            label_singular: pharmacie
+            widget: list
+            summary: "{{fields.nom}} — {{fields.ville}}"
+            hint: "Glissez les pharmacies pour changer l'ordre : la première de la liste s'affiche en premier."
+            fields:
+              - { name: nom, label: Nom de la pharmacie, widget: string }
+              - name: slug
+                label: Identifiant de l'album
+                widget: string
+                hint: "Minuscules, chiffres et tirets uniquement, ex. pharmacie-du-port. Sert à l'adresse de l'album : ne plus le modifier une fois publié."
+                pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', "Utilisez seulement des minuscules sans accent, des chiffres et des tirets."]
+              - { name: ville, label: Ville / quartier, widget: string, required: false }
+              - { name: annee, label: Année de livraison, widget: string, required: false, pattern: ['^(\d{4})?$', "Année sur 4 chiffres, ex. 2025"] }
+              - name: categories
+                label: Filtres de la galerie
+                widget: select
+                multiple: true
+                min: 1
+                options:
+                  - { label: Agencement complet, value: complet }
+                  - { label: Enseignes, value: enseigne }
+                  - { label: Croix LED, value: croix }
+                  - { label: Mobilier & rayonnage, value: mobilier }
+                  - { label: Façade, value: facade }
+              - name: prestations
+                label: Prestations réalisées
+                widget: list
+                field: { name: prestation, label: Prestation, widget: string }
+                hint: "Courtes, ex. Croix LED, Comptoirs, Habillage façade"
+              - { name: description, label: Description, widget: text, required: false, hint: "Une ou deux phrases factuelles : matériaux, éléments posés." }
+              - name: photos
+                label: Photos de l'album
+                label_singular: photo
+                widget: list
+                min: 1
+                summary: "{{fields.legende}}"
+                hint: "La première photo sert de couverture. Format paysage conseillé, JPG de moins de 500 Ko."
+                fields:
+                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: legende, label: Légende, widget: string, required: false }
+              - { name: aConfirmer, label: "Informations à vérifier", widget: boolean, default: false, required: false, hint: "Repère interne, non affiché sur le site." }
+
+  # ------------------------------------------------------------------
+  - name: modeles
+    label: Modèles (catalogue)
+    description: "Modèles affichés sur la page « Nos modèles », par pôle."
+    editor: { preview: false }
+    files:
+      - name: catalogue
+        label: Catalogue des modèles
+        file: data/modeles.json
+        fields:
+          - name: croix
+            label: Croix LED
+            widget: object
+            collapsed: true
+            fields:
+              - { name: titre, label: Titre de la page, widget: string }
+              - { name: intro, label: Introduction, widget: text }
+              - name: modeles
+                label: Modèles
+                label_singular: modèle
+                widget: list
+                summary: "{{fields.nom}}"
+                hint: "Glissez les modèles pour changer l'ordre. Les modèles « Nouveau » s'affichent en premier."
+                fields:
+                  - { name: nom, label: Nom du modèle, widget: string }
+                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: description, label: Description, widget: text, required: false }
+                  - name: options
+                    label: Options / matériaux
+                    widget: list
+                    required: false
+                    field: { name: option, label: Option, widget: string }
+                  - { name: nouveau, label: "Badge « Nouveau »", widget: boolean, default: false, required: false }
+                  - { name: provisoire, label: "Photo provisoire", widget: boolean, default: false, required: false, hint: "Affiche la mention « Photo provisoire »." }
+                  - { name: cadrage, label: "Cadrage (avancé)", widget: string, required: false, hint: "Point à mettre en avant, ex. 20% 50% (gauche, milieu). Laisser vide pour centrer." }
+                  - { name: zoom, label: "Zoom (avancé)", widget: number, value_type: float, min: 1, max: 3, step: 0.1, default: 1, required: false }
+          - name: enseignes
+            label: Enseignes lumineuses
+            widget: object
+            collapsed: true
+            fields:
+              - { name: titre, label: Titre de la page, widget: string }
+              - { name: intro, label: Introduction, widget: text }
+              - name: modeles
+                label: Modèles
+                label_singular: modèle
+                widget: list
+                summary: "{{fields.nom}}"
+                hint: "Glissez les modèles pour changer l'ordre. Les modèles « Nouveau » s'affichent en premier."
+                fields:
+                  - { name: nom, label: Nom du modèle, widget: string }
+                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: description, label: Description, widget: text, required: false }
+                  - name: options
+                    label: Options / matériaux
+                    widget: list
+                    required: false
+                    field: { name: option, label: Option, widget: string }
+                  - { name: nouveau, label: "Badge « Nouveau »", widget: boolean, default: false, required: false }
+                  - { name: provisoire, label: "Photo provisoire", widget: boolean, default: false, required: false, hint: "Affiche la mention « Photo provisoire »." }
+                  - { name: cadrage, label: "Cadrage (avancé)", widget: string, required: false, hint: "Point à mettre en avant, ex. 20% 50% (gauche, milieu). Laisser vide pour centrer." }
+                  - { name: zoom, label: "Zoom (avancé)", widget: number, value_type: float, min: 1, max: 3, step: 0.1, default: 1, required: false }
+          - name: mobilier
+            label: Mobilier & rayonnage
+            widget: object
+            collapsed: true
+            fields:
+              - { name: titre, label: Titre de la page, widget: string }
+              - { name: intro, label: Introduction, widget: text }
+              - name: modeles
+                label: Modèles
+                label_singular: modèle
+                widget: list
+                summary: "{{fields.nom}}"
+                hint: "Glissez les modèles pour changer l'ordre. Les modèles « Nouveau » s'affichent en premier."
+                fields:
+                  - { name: nom, label: Nom du modèle, widget: string }
+                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: description, label: Description, widget: text, required: false }
+                  - name: options
+                    label: Options / matériaux
+                    widget: list
+                    required: false
+                    field: { name: option, label: Option, widget: string }
+                  - { name: nouveau, label: "Badge « Nouveau »", widget: boolean, default: false, required: false }
+                  - { name: provisoire, label: "Photo provisoire", widget: boolean, default: false, required: false, hint: "Affiche la mention « Photo provisoire »." }
+                  - { name: cadrage, label: "Cadrage (avancé)", widget: string, required: false, hint: "Point à mettre en avant, ex. 20% 50% (gauche, milieu). Laisser vide pour centrer." }
+                  - { name: zoom, label: "Zoom (avancé)", widget: number, value_type: float, min: 1, max: 3, step: 0.1, default: 1, required: false }
+          - name: facade
+            label: Habillage façade
+            widget: object
+            collapsed: true
+            fields:
+              - { name: titre, label: Titre de la page, widget: string }
+              - { name: intro, label: Introduction, widget: text }
+              - name: modeles
+                label: Modèles
+                label_singular: modèle
+                widget: list
+                summary: "{{fields.nom}}"
+                hint: "Glissez les modèles pour changer l'ordre. Les modèles « Nouveau » s'affichent en premier."
+                fields:
+                  - { name: nom, label: Nom du modèle, widget: string }
+                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: description, label: Description, widget: text, required: false }
+                  - name: options
+                    label: Options / matériaux
+                    widget: list
+                    required: false
+                    field: { name: option, label: Option, widget: string }
+                  - { name: nouveau, label: "Badge « Nouveau »", widget: boolean, default: false, required: false }
+                  - { name: provisoire, label: "Photo provisoire", widget: boolean, default: false, required: false, hint: "Affiche la mention « Photo provisoire »." }
+                  - { name: cadrage, label: "Cadrage (avancé)", widget: string, required: false, hint: "Point à mettre en avant, ex. 20% 50% (gauche, milieu). Laisser vide pour centrer." }
+                  - { name: zoom, label: "Zoom (avancé)", widget: number, value_type: float, min: 1, max: 3, step: 0.1, default: 1, required: false }

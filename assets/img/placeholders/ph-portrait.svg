@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEF0EF"/><stop offset="1" stop-color="#DDE1DF"/></linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#g)"/>
+  <circle cx="200" cy="215" r="72" fill="#C9CFCC"/>
+  <path d="M50 500c0-120 70-180 150-180s150 60 150 180z" fill="#C9CFCC"/>
+  <text x="200" y="64" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="15" fill="#5C6262" letter-spacing="2.5">PORTRAIT À REMPLACER</text>
+</svg>

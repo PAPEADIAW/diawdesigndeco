@@ -1,0 +1,1 @@
+﻿Déposer ici les photos des modèles (JPG ou WebP, 1200x900 conseillé, moins de 150 Ko), puis les déclarer dans assets/js/modeles-data.js.
