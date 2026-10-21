@@ -1076,7 +1076,7 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
   .lightbox__next { grid-column: 2; grid-row: 2; justify-self: start; }
 }
 
-/* ---------- 21. SAV : choix multiple et photos ---------- */
+/* ---------- 21. SAV : choix multiple ---------- */
 .sav__help { margin-top: -8px; font-size: .875rem; color: var(--text-muted); }
 .choice__inner { position: relative; }
 .choice__check {
@@ -1091,31 +1091,10 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
 .problem-groups { display: grid; gap: 18px; }
 .problem-group { display: grid; gap: 10px; padding: 16px; background: var(--gray-light); border-radius: var(--radius); }
 .problem-group__title { font-family: var(--font-title); font-weight: 500; font-size: .95rem; color: var(--text-strong); }
-
-.photo-drop {
-  display: flex; align-items: center; gap: 14px; padding: 18px 20px; cursor: pointer;
-  border: 1.5px dashed var(--line-strong); border-radius: var(--radius); background: var(--white);
-  transition: border-color .2s, background-color .2s;
-}
-.photo-drop:hover { border-color: var(--green-text); background: #F6FBF7; }
-#s-photos:focus-visible + .photo-drop { outline: 3px solid var(--orange); outline-offset: 2px; }
-.photo-drop svg { flex: none; width: 36px; height: 36px; fill: none; stroke: var(--green-text); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.photo-drop strong { display: block; font-family: var(--font-title); font-weight: 500; color: var(--text-strong); }
-.photo-drop span span { display: block; font-size: .875rem; color: var(--text-muted); }
-.photo-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
-.photo-list:empty { display: none; }
-.photo-item { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: var(--radius-sm); background: var(--gray-light); }
-.photo-item img { width: 100%; height: 100%; object-fit: cover; }
-.photo-item__del {
-  position: absolute; top: 6px; right: 6px; display: grid; place-items: center; width: 30px; height: 30px; padding: 0;
-  color: var(--white); background: rgba(46, 46, 46, .82); border: 0; border-radius: 50%;
-}
-.photo-item__del svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
-.photo-item__size { position: absolute; left: 6px; bottom: 6px; padding: 2px 6px; font-size: .6875rem; color: var(--white); background: rgba(46, 46, 46, .75); border-radius: 4px; }
-.sav__photo-status:empty { display: none; }
-.sav__photo-status { padding: 10px 14px; border-radius: var(--radius-sm); font-size: .9375rem; }
-.sav__photo-status.is-ok { color: #1B6A2F; background: #E8F4EB; }
-.sav__photo-status.is-warn { color: #9A3E0B; background: #FDEEE6; }
+.sav__status:empty { display: none; }
+.sav__status { padding: 10px 14px; border-radius: var(--radius-sm); font-size: .9375rem; }
+.sav__status.is-ok { color: #1B6A2F; background: #E8F4EB; }
+.sav__status.is-warn { color: #9A3E0B; background: #FDEEE6; }
 .sav__done-actions .btn[hidden] { display: none; }
 
 /* Carte « Et aussi » : vue 3D d'une officine sous le texte */

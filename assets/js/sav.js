@@ -1,6 +1,6 @@
 /* DIAW DESIGN DÉCO — Service après-vente
-   1. Le client coche un ou plusieurs équipements, les problèmes constatés, ajoute des photos.
-   2. La demande et les photos sont enregistrées par Netlify Forms (formulaire « sav »).
+   1. Le client coche un ou plusieurs équipements et les problèmes constatés.
+   2. La demande est enregistrée par Netlify Forms (formulaire « sav »).
    3. WhatsApp s'ouvre vers le SAV avec la demande rédigée et le numéro de suivi :
       le SAV répond au client dans la même conversation. */
 (() => {
@@ -9,9 +9,6 @@
   /* ==================== CONFIGURATION (modifiable) ==================== */
   // Numéro WhatsApp du service après-vente, format international sans « + » ni espaces
   const SAV_WHATSAPP = '221777494934';
-  const MAX_PHOTOS = 5;
-  const PHOTO_MAX_SIDE = 1600;   // pixels, côté le plus long après réduction
-  const PHOTO_QUALITY = 0.78;    // qualité JPEG après réduction
 
   // Équipements (boutons de l'étape 1) et problèmes proposés (étape 2)
   const CATEGORIES = [
@@ -46,16 +43,11 @@
   const prioWrap = $('[data-priorities]');
   const progress = $('[data-sav-progress]');
   const done = $('[data-sav-done]');
-  const photoInput = $('#s-photos');
-  const photoList = $('[data-photos]');
-  const photoError = $('[data-error="photos"]');
   const submitBtn = $('[data-sav-submit]');
   const submitLabel = $('[data-sav-submit-label]');
-  const shareBtn = $('[data-sav-share]');
 
   const waLink = (text) => `https://wa.me/${SAV_WHATSAPP}?text=${encodeURIComponent(text)}`;
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const plural = (n, w) => `${n} ${w}${n > 1 ? 's' : ''}`;
 
   const storage = {
     get() { try { return localStorage.getItem('ddd-sav-last'); } catch (e) { return null; } },
@@ -114,78 +106,6 @@
     });
   };
 
-  /* ---------- Photos : réduction côté navigateur avant l'envoi ---------- */
-  let photos = []; // { blob, url, name }
-
-  const loadImage = (file) => new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => resolve({ img, url });
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('image illisible')); };
-    img.src = url;
-  });
-
-  const shrink = async (file) => {
-    const { img, url } = await loadImage(file);
-    const ratio = Math.min(1, PHOTO_MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
-    const w = Math.round(img.naturalWidth * ratio);
-    const h = Math.round(img.naturalHeight * ratio);
-    const canvas = document.createElement('canvas');
-    canvas.width = w; canvas.height = h;
-    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-    URL.revokeObjectURL(url);
-    const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', PHOTO_QUALITY));
-    if (!blob) throw new Error('conversion impossible');
-    return blob;
-  };
-
-  const renderPhotos = () => {
-    photoList.replaceChildren(...photos.map((p, i) => {
-      const li = document.createElement('li');
-      li.className = 'photo-item';
-      const img = document.createElement('img');
-      img.src = p.url; img.alt = `Photo ${i + 1}`;
-      const del = document.createElement('button');
-      del.type = 'button';
-      del.className = 'photo-item__del';
-      del.setAttribute('aria-label', `Retirer la photo ${i + 1}`);
-      del.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-      del.addEventListener('click', () => {
-        URL.revokeObjectURL(p.url);
-        photos.splice(i, 1);
-        renderPhotos();
-        photoInput.focus();
-      });
-      const size = document.createElement('span');
-      size.className = 'photo-item__size';
-      size.textContent = `${Math.max(1, Math.round(p.blob.size / 1024))} Ko`;
-      li.append(img, del, size);
-      return li;
-    }));
-    $('.photo-drop strong').textContent = photos.length ? `Ajouter des photos (${photos.length}/${MAX_PHOTOS})` : 'Ajouter des photos';
-  };
-
-  photoInput.addEventListener('change', async () => {
-    const files = [...photoInput.files].filter((f) => f.type.startsWith('image/'));
-    photoInput.value = '';
-    photoError.classList.remove('is-shown');
-    const room = MAX_PHOTOS - photos.length;
-    if (files.length > room) {
-      photoError.textContent = `Maximum ${MAX_PHOTOS} photos : ${plural(files.length - room, 'photo')} non ajoutée${files.length - room > 1 ? 's' : ''}.`;
-      photoError.classList.add('is-shown');
-    }
-    for (const file of files.slice(0, Math.max(0, room))) {
-      try {
-        const blob = await shrink(file);
-        photos.push({ blob, url: URL.createObjectURL(blob) });
-      } catch (e) {
-        photoError.textContent = `« ${file.name} » n'a pas pu être lue. Essayez une autre photo.`;
-        photoError.classList.add('is-shown');
-      }
-    }
-    renderPhotos();
-  });
-
   /* ---------- Progression ---------- */
   const required = ['officine', 'nom', 'telephone', 'ville'];
   const updateProgress = () => {
@@ -213,15 +133,17 @@
     return `SAV-${ymd}-${String(Math.floor(1000 + Math.random() * 9000))}`;
   };
 
-  // Envoi à Netlify Forms (demande + photos). Renvoie true si le SAV l'a bien reçue.
-  const saveToNetlify = async (fields, ref) => {
-    const fd = new FormData();
-    Object.entries(fields).forEach(([k, v]) => fd.append(k, v));
-    photos.forEach((p, i) => fd.append(`photo${i + 1}`, p.blob, `${ref}-photo${i + 1}.jpg`));
+  // Envoi à Netlify Forms. Renvoie true si le SAV a bien reçu la demande.
+  const saveToNetlify = async (fields) => {
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 45000);
+    const timer = setTimeout(() => ctrl.abort(), 20000);
     try {
-      const res = await fetch('/', { method: 'POST', body: fd, signal: ctrl.signal });
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(fields).toString(),
+        signal: ctrl.signal,
+      });
       return res.ok;
     } catch (e) {
       return false;
@@ -259,22 +181,13 @@
     // Fenêtre ouverte tout de suite (pendant le clic) pour ne pas être bloquée par le navigateur
     const win = window.open('', '_blank');
     submitBtn.disabled = true;
-    submitLabel.textContent = photos.length ? `Envoi de ${plural(photos.length, 'photo')}…` : 'Envoi en cours…';
+    submitLabel.textContent = 'Envoi en cours…';
 
     const saved = await saveToNetlify({
       'form-name': 'sav', 'bot-field': '', reference: ref, equipements, problemes,
       priorite_libelle: prio.label, officine: get('officine'), nom: get('nom'), telephone: get('telephone'),
       ville: get('ville'), annee: get('annee'), dispo: get('dispo'), description: get('description'),
-    }, ref);
-
-    let photoLine = '';
-    if (photos.length) {
-      photoLine = saved
-        ? `${plural(photos.length, 'photo')} transmise${photos.length > 1 ? 's' : ''} au SAV avec ce dossier.`
-        : `J'envoie ${plural(photos.length, 'photo')} à la suite de ce message.`;
-    } else {
-      photoLine = 'Photos envoyées à la suite de ce message.';
-    }
+    });
 
     const lines = [
       `*Demande SAV — ${ref}*`,
@@ -289,8 +202,6 @@
       get('annee') ? `*Installation :* ${get('annee')}` : null,
       get('dispo') ? `*Disponibilité :* ${get('dispo')}` : null,
       get('description') ? `\n*Description :*\n${get('description')}` : null,
-      '',
-      photoLine,
     ].filter((l) => l !== null);
     const url = waLink(lines.join('\n'));
 
@@ -300,23 +211,11 @@
     // Confirmation
     $('[data-sav-ref]').textContent = ref;
     $('[data-sav-reopen]').href = url;
-    const status = $('[data-sav-photo-status]');
-    if (saved) {
-      status.className = 'sav__photo-status is-ok';
-      status.textContent = photos.length
-        ? `Demande et ${plural(photos.length, 'photo')} bien reçues par le SAV.`
-        : 'Demande bien reçue par le SAV.';
-    } else {
-      status.className = 'sav__photo-status is-warn';
-      status.textContent = photos.length
-        ? "Les photos n'ont pas pu être transmises : ajoutez-les dans la conversation WhatsApp."
-        : 'Envoyez le message WhatsApp pour transmettre votre demande.';
-    }
-    // Partage direct des photos dans WhatsApp (téléphones compatibles)
-    const files = photos.map((p, i) => new File([p.blob], `${ref}-photo${i + 1}.jpg`, { type: 'image/jpeg' }));
-    const canShareFiles = files.length && navigator.canShare && navigator.canShare({ files });
-    shareBtn.hidden = !canShareFiles;
-    shareBtn.onclick = canShareFiles ? () => navigator.share({ files, text: `Photos — ${ref}` }).catch(() => {}) : null;
+    const status = $('[data-sav-status]');
+    status.className = `sav__status ${saved ? 'is-ok' : 'is-warn'}`;
+    status.textContent = saved
+      ? 'Demande bien reçue par le SAV.'
+      : 'Envoyez le message WhatsApp pour transmettre votre demande.';
 
     submitBtn.disabled = false;
     submitLabel.textContent = 'Envoyer au SAV par WhatsApp';
@@ -329,9 +228,6 @@
   $('[data-sav-new]').addEventListener('click', () => {
     form.reset();
     form.classList.remove('was-validated');
-    photos.forEach((p) => URL.revokeObjectURL(p.url));
-    photos = [];
-    renderPhotos();
     renderProblems();
     done.hidden = true;
     form.hidden = false;

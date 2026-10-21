@@ -90,13 +90,12 @@ L'album affiche toutes les photos (visionneuse plein écran : flèches, clavier,
 **À compléter :** 11 albums sont en place. 3 pharmacies sont nommées d'après leur enseigne (Fleuve Nouvelle, Adja Daba Diagne, Faa Ikhal Makhis). Les 8 autres, marquées `aConfirmer: true`, ont été regroupées d'après le style des photos : il faut indiquer le nom, la ville et vérifier le regroupement. Pour atteindre 10 références par filtre, ajouter des pharmacies depuis `/admin`.
 
 ## Service après-vente (`sav.html`)
-Le client **coche un ou plusieurs équipements** (6 cartes), **un ou plusieurs problèmes par équipement**, la priorité, ajoute **jusqu'à 5 photos** (prises avec le téléphone ou choisies dans la galerie, réduites automatiquement à 1 600 px avant l'envoi), puis saisit ses coordonnées.
+Le client **coche un ou plusieurs équipements** (6 cartes), **un ou plusieurs problèmes par équipement**, la priorité, puis saisit ses coordonnées.
 Au clic sur « Envoyer au SAV par WhatsApp » :
-1. la demande et les photos sont **enregistrées par Netlify Forms** (formulaire `sav`) avec le **numéro de suivi** `SAV-AAAAMMJJ-1234` ;
+1. la demande est **enregistrée par Netlify Forms** (formulaire `sav`) avec le **numéro de suivi** `SAV-AAAAMMJJ-1234` ;
 2. WhatsApp s'ouvre vers le SAV avec le message déjà rédigé ; le client l'envoie depuis son propre WhatsApp et le SAV **répond dans la même conversation**.
-Si l'envoi des photos échoue, le message WhatsApp le signale et invite le client à les joindre dans la conversation. Sur téléphone, un bouton « Partager les photos sur WhatsApp » permet aussi de les envoyer directement.
 
-**À activer une fois dans Netlify** : *Forms* → **Enable form detection**, puis redéployer. Les demandes et leurs photos apparaissent dans *Forms → sav* ; *Forms → Form notifications* permet d'être prévenu par e-mail à chaque demande. Vérifier la limite de fichiers reçus par mois de votre offre Netlify.
+**À activer une fois dans Netlify** : *Forms* → **Enable form detection**, puis redéployer. Les demandes apparaissent dans *Forms → sav* ; *Forms → Form notifications* permet d’être prévenu par e-mail à chaque demande.
 
 - **Suivi** : le bloc « Suivre une demande » envoie « je souhaite connaître le suivi de ma demande SAV-… » au SAV. Le dernier numéro est mémorisé dans le navigateur du client.
 - **Lien direct vers un ou plusieurs équipements** : `sav.html?equipement=croix` ou `sav.html?equipement=croix,enseigne` (valeurs : `croix`, `enseigne`, `mobilier`, `facade`, `eclairage`, `autre`). Pratique à imprimer en QR code sur l'équipement posé.
@@ -146,4 +145,4 @@ Rédigés au plus près du brief, sans superlatifs. À confirmer avec la directi
 Pour viser > 90 sur mobile une fois les vraies photos en place : les compresser (squoosh.app), respecter les poids indiqués ci-dessus, puis vérifier avec PageSpeed Insights.
 
 ## Mise à jour des styles et scripts
-Les liens vers `assets/css/main.css` et `assets/js/*.js` portent un numéro de version (`?v=20261021`). Après une modification de ces fichiers, changer ce numéro dans les 4 pages HTML (par ex. `?v=20261105`) : tous les navigateurs rechargent alors la nouvelle version. `netlify.toml` demande en plus au navigateur de vérifier ces fichiers à chaque visite ; seules les images restent en cache 7 jours.
+Les liens vers `assets/css/main.css` et `assets/js/*.js` portent un numéro de version (`?v=20261021b`). Après une modification de ces fichiers, changer ce numéro dans les 4 pages HTML (par ex. `?v=20261105`) : tous les navigateurs rechargent alors la nouvelle version. `netlify.toml` demande en plus au navigateur de vérifier ces fichiers à chaque visite ; seules les images restent en cache 7 jours.

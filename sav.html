@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;700&display=swap">
-  <link rel="stylesheet" href="assets/css/main.css?v=20261021">
+  <link rel="stylesheet" href="assets/css/main.css?v=20261021b">
 </head>
 <body class="page-sav">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -64,7 +64,7 @@
         <p class="page-hero__lead">Choisissez l'équipement et le problème. Votre demande part sur WhatsApp avec un numéro de suivi. Notre service vous répond dans la même conversation.</p>
         <ol class="sav-how">
           <li><span>1</span>Vous décrivez le problème</li>
-          <li><span>2</span>Vous envoyez sur WhatsApp, avec vos photos</li>
+          <li><span>2</span>Vous envoyez la demande sur WhatsApp</li>
           <li><span>3</span>Nous vous répondons sur WhatsApp</li>
         </ol>
       </div>
@@ -72,8 +72,8 @@
 
     <section class="section section--gray">
       <div class="container sav">
-        <!-- Formulaire enregistré par Netlify Forms (demande + photos), puis transmis sur WhatsApp -->
-        <form class="form sav__form" id="sav-form" name="sav" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data" novalidate>
+        <!-- Formulaire enregistré par Netlify Forms, puis transmis sur WhatsApp -->
+        <form class="form sav__form" id="sav-form" name="sav" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
           <input type="hidden" name="form-name" value="sav">
           <p class="sr-only"><label>Ne pas remplir <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
           <!-- Champs remplis par le script avant l'envoi (déclarés ici pour que Netlify les enregistre) -->
@@ -81,9 +81,6 @@
           <input type="hidden" name="equipements">
           <input type="hidden" name="problemes">
           <input type="hidden" name="priorite_libelle">
-          <div hidden>
-            <input type="file" name="photo1" tabindex="-1"><input type="file" name="photo2" tabindex="-1"><input type="file" name="photo3" tabindex="-1"><input type="file" name="photo4" tabindex="-1"><input type="file" name="photo5" tabindex="-1">
-          </div>
 
           <div class="sav__progress" aria-hidden="true"><span data-sav-progress></span></div>
 
@@ -107,23 +104,9 @@
             <p class="sav__sublabel" id="prio-label">Priorité</p>
             <div class="chip-choices" role="radiogroup" aria-labelledby="prio-label" data-priorities></div>
           </fieldset>
-
-          <!-- Étape 3 : photos -->
+          <!-- Étape 3 : coordonnées -->
           <fieldset class="sav__step">
-            <legend><span class="sav__num">3</span>Photos de l'équipement</legend>
-            <p class="sav__help">Jusqu'à 5 photos. Elles sont réduites automatiquement avant l'envoi.</p>
-            <input id="s-photos" class="sr-only" type="file" accept="image/*" multiple>
-            <label class="photo-drop" for="s-photos">
-              <svg viewBox="0 0 24 24" width="36" height="36" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-              <span><strong>Ajouter des photos</strong><span>Prendre une photo ou choisir dans la galerie</span></span>
-            </label>
-            <ul class="photo-list" data-photos aria-live="polite"></ul>
-            <p class="field__error" data-error="photos"></p>
-          </fieldset>
-
-          <!-- Étape 4 : coordonnées -->
-          <fieldset class="sav__step">
-            <legend><span class="sav__num">4</span>Vos coordonnées</legend>
+            <legend><span class="sav__num">3</span>Vos coordonnées</legend>
             <div class="form__grid">
               <div class="field">
                 <label for="s-officine">Nom de l'officine <span aria-hidden="true">*</span></label>
@@ -165,7 +148,7 @@
               <svg class="btn__icon btn__icon--lead" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.4-4A8 8 0 1 1 8.3 19z"/><path d="M9 9.5c.5 2.2 2.3 4 4.5 4.5l1-1.2 2 .9c-.3 1.2-1.3 1.8-2.5 1.6A7 7 0 0 1 8.2 10c-.2-1.2.4-2.2 1.6-2.5l.9 2z"/></svg>
               <span data-sav-submit-label>Envoyer au SAV par WhatsApp</span>
             </button>
-            <p class="form__note">Votre demande et vos photos sont transmises au SAV avec un numéro de suivi. WhatsApp s'ouvre ensuite avec la demande déjà rédigée : il ne reste qu'à appuyer sur « Envoyer ».</p>
+            <p class="form__note">Votre demande est transmise au SAV avec un numéro de suivi. WhatsApp s'ouvre ensuite avec la demande déjà rédigée : il ne reste qu'à appuyer sur « Envoyer ».</p>
           </div>
           <noscript><p class="form__note">Activez JavaScript pour utiliser ce formulaire, ou appelez le SAV au +221 77 749 49 34.</p></noscript>
         </form>
@@ -175,11 +158,10 @@
           <span class="sav__done-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
           <h2>Votre demande est prête</h2>
           <p>Numéro de suivi : <strong class="sav__ref" data-sav-ref></strong></p>
-          <p class="sav__photo-status" data-sav-photo-status></p>
+          <p class="sav__status" data-sav-status></p>
           <p>Si WhatsApp ne s'est pas ouvert, utilisez le bouton ci-dessous.</p>
           <div class="sav__done-actions">
             <a class="btn btn--green" data-sav-reopen href="#" target="_blank" rel="noopener">Ouvrir WhatsApp</a>
-            <button class="btn btn--outline-dark" type="button" data-sav-share hidden>Partager les photos sur WhatsApp</button>
             <button class="btn btn--outline-dark" type="button" data-sav-new>Nouvelle demande</button>
           </div>
         </div>
@@ -220,7 +202,7 @@
     <div class="signature" aria-hidden="true"></div>
   </footer>
 
-  <script src="assets/js/main.js?v=20261021" defer></script>
-  <script src="assets/js/sav.js?v=20261021" defer></script>
+  <script src="assets/js/main.js?v=20261021b" defer></script>
+  <script src="assets/js/sav.js?v=20261021b" defer></script>
 </body>
 </html>
