@@ -89,6 +89,18 @@ L'album affiche toutes les photos (visionneuse plein écran : flèches, clavier,
 
 **À compléter :** 11 albums sont en place. 3 pharmacies sont nommées d'après leur enseigne (Fleuve Nouvelle, Adja Daba Diagne, Faa Ikhal Makhis). Les 8 autres, marquées `aConfirmer: true`, ont été regroupées d'après le style des photos : il faut indiquer le nom, la ville et vérifier le regroupement. Pour atteindre 10 références par filtre, ajouter des pharmacies depuis `/admin`.
 
+## Formulaire de devis → e-mail (Formspree)
+Les demandes du formulaire « Décrivez-nous votre officine » sont envoyées par **Formspree** vers la boîte mail du compte Formspree (diawdesigndeco@gmail.com). Après l'envoi, le visiteur voit : « Merci, votre demande a bien été envoyée. Nous vous contacterons sous 24 heures. »
+
+**Activation (une fois, 5 minutes)**
+1. Sur formspree.io, créer un compte avec **diawdesigndeco@gmail.com** et confirmer l'adresse (lien reçu par e-mail).
+2. **+ New form** → nom « Devis site » → l'adresse de réception est diawdesigndeco@gmail.com.
+3. Copier l'identifiant du formulaire : la fin de l'adresse `https://formspree.io/f/xxxxxxxx`.
+4. Dans `index.html`, sur la balise `<form … id="devis-form" …>`, remplir `data-formspree="xxxxxxxx"`, puis publier.
+5. Faire une demande de test depuis le site : elle arrive par e-mail ; la première fois, Formspree peut demander de confirmer le formulaire.
+
+Tant que `data-formspree` est vide, les demandes passent par Netlify Forms (*Forms → devis*). Chaque e-mail a pour objet « Nouvelle demande de devis — nom de l'officine ». Le champ caché `_gotcha` bloque les robots. L'offre gratuite de Formspree limite le nombre d'envois par mois.
+
 ## Témoignages
 La section « Témoignages » de l'accueil (entre Réalisations et À propos) affiche **jusqu'à 3 avis** lus dans `data/temoignages.json`. Elle reste **invisible tant que la liste est vide**. Pour chaque témoignage : citation, nom, fonction, officine, ville, photo facultative (sinon les initiales) et album lié facultatif (lien « Voir la réalisation »). À remplir depuis `/admin` → **Témoignages**, uniquement avec des propos réels et l'accord de la personne.
 
@@ -148,4 +160,4 @@ Rédigés au plus près du brief, sans superlatifs. À confirmer avec la directi
 Pour viser > 90 sur mobile une fois les vraies photos en place : les compresser (squoosh.app), respecter les poids indiqués ci-dessus, puis vérifier avec PageSpeed Insights.
 
 ## Mise à jour des styles et scripts
-Les liens vers `assets/css/main.css` et `assets/js/*.js` portent un numéro de version (`?v=20261021c`). Après une modification de ces fichiers, changer ce numéro dans les 4 pages HTML (par ex. `?v=20261105`) : tous les navigateurs rechargent alors la nouvelle version. `netlify.toml` demande en plus au navigateur de vérifier ces fichiers à chaque visite ; seules les images restent en cache 7 jours.
+Les liens vers `assets/css/main.css` et `assets/js/*.js` portent un numéro de version (`?v=20261021d`). Après une modification de ces fichiers, changer ce numéro dans les 4 pages HTML (par ex. `?v=20261105`) : tous les navigateurs rechargent alors la nouvelle version. `netlify.toml` demande en plus au navigateur de vérifier ces fichiers à chaque visite ; seules les images restent en cache 7 jours.

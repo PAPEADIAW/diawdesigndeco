@@ -1165,3 +1165,19 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
 }
 .testimonial-card__id strong { display: block; font-family: var(--font-title); font-weight: 500; color: var(--text-strong); }
 .testimonial-card__id span { display: block; font-size: .875rem; font-style: italic; color: var(--text-muted); }
+
+/* ---------- 23. Confirmation du formulaire de devis ---------- */
+.form[hidden] { display: none; }
+.form-done {
+  display: grid; justify-items: start; gap: 12px;
+  padding: clamp(28px, 4vw, 48px); background: var(--white); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); border-top: 4px solid var(--green);
+}
+.form-done[hidden] { display: none; }
+.form-done:focus { outline: none; }
+.form-done__icon { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: #E8F4EB; color: var(--green-text); }
+.form-done__icon svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.form-done h3 { font-size: clamp(1.25rem, 1.1rem + .6vw, 1.6rem); }
+.form-done p { font-size: var(--fs-lead); color: var(--text-muted); }
+.form-done .btn { margin-top: 8px; }
+@media (min-width: 1024px) { .contact > .form, .contact > .form-done { grid-column: 1; grid-row: 1; } }

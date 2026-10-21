@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;700&display=swap">
   <link rel="preload" as="image" href="assets/img/realisations/parapharmacie-podium-2-l.jpg" imagesrcset="assets/img/realisations/parapharmacie-podium-2-s.jpg 800w, assets/img/realisations/parapharmacie-podium-2-l.jpg 1600w" imagesizes="100vw" fetchpriority="high">
-  <link rel="stylesheet" href="assets/css/main.css?v=20261021c">
+  <link rel="stylesheet" href="assets/css/main.css?v=20261021d">
 
   <script type="application/ld+json">
   {
@@ -437,9 +437,11 @@
         </header>
 
         <div class="contact">
-          <form class="form reveal" id="devis-form" name="devis" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <!-- Envoi : Formspree (e-mail vers diawdesigndeco@gmail.com) dès que data-formspree contient l'identifiant du formulaire ; sinon Netlify Forms -->
+          <form class="form reveal" id="devis-form" name="devis" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-formspree="" novalidate>
             <input type="hidden" name="form-name" value="devis">
-            <p class="sr-only"><label>Ne pas remplir <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+            <p class="sr-only"><label>Ne pas remplir <input name="bot-field" tabindex="-1" autocomplete="off"></label><label>Ne pas remplir <input name="_gotcha" tabindex="-1" autocomplete="off"></label></p>
+            <input type="hidden" name="_subject" value="Nouvelle demande de devis — site Diaw Design Déco">
 
             <div class="form__grid">
               <div class="field">
@@ -502,6 +504,14 @@
             <p class="form__note">Les champs marqués * sont obligatoires. Vos informations servent uniquement à répondre à votre demande.</p>
             <div class="form__status" role="status" aria-live="polite"></div>
           </form>
+
+          <!-- Confirmation affichée après l'envoi -->
+          <div class="form-done" data-form-done hidden tabindex="-1" role="status">
+            <span class="form-done__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+            <h3>Merci, votre demande a bien été envoyée.</h3>
+            <p>Nous vous contacterons sous 24 heures.</p>
+            <button class="btn btn--outline-dark" type="button" data-form-again>Envoyer une autre demande</button>
+          </div>
 
           <aside class="contact__info reveal" style="--d:.1s" aria-label="Coordonnées">
             <ul class="info-list">
@@ -590,9 +600,9 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.4-4A8 8 0 1 1 8.3 19z"/><path d="M9 9.5c.5 2.2 2.3 4 4.5 4.5l1-1.2 2 .9c-.3 1.2-1.3 1.8-2.5 1.6A7 7 0 0 1 8.2 10c-.2-1.2.4-2.2 1.6-2.5l.9 2z"/></svg>
   </a>
 
-  <script src="assets/js/donnees.js?v=20261021c" defer></script>
-  <script src="assets/js/main.js?v=20261021c" defer></script>
-  <script src="assets/js/realisations.js?v=20261021c" defer></script>
-  <script src="assets/js/temoignages.js?v=20261021c" defer></script>
+  <script src="assets/js/donnees.js?v=20261021d" defer></script>
+  <script src="assets/js/main.js?v=20261021d" defer></script>
+  <script src="assets/js/realisations.js?v=20261021d" defer></script>
+  <script src="assets/js/temoignages.js?v=20261021d" defer></script>
 </body>
 </html>

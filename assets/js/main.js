@@ -200,26 +200,64 @@
       return false;
     };
 
+    // Formspree : identifiant du formulaire (ex. « xyzabcd ») dans l'attribut data-formspree du <form>.
+    // Les demandes arrivent par e-mail sur l'adresse du compte Formspree (diawdesigndeco@gmail.com).
+    // Sans identifiant, l'envoi passe par Netlify Forms.
+    const formspreeId = (form.dataset.formspree || '').trim();
+    const done = $('[data-form-done]');
+    const submitLabel = submitBtn.innerHTML;
+
+    const send = async () => {
+      const data = new FormData(form);
+      if (formspreeId) {
+        data.delete('form-name');
+        data.delete('bot-field');
+        const officine = String(data.get('officine') || '').trim();
+        if (officine) data.set('_subject', `Nouvelle demande de devis — ${officine}`);
+        return fetch(`https://formspree.io/f/${encodeURIComponent(formspreeId)}`, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: data,
+        });
+      }
+      data.delete('_gotcha');
+      data.delete('_subject');
+      return fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data).toString(),
+      });
+    };
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!validate()) return;
       submitBtn.disabled = true;
+      submitBtn.textContent = 'Envoi en cours…';
+      status.textContent = '';
+      status.className = 'form__status';
       try {
-        // Netlify Forms : POST encodé sur la page elle-même
-        const res = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(new FormData(form)).toString(),
-        });
+        const res = await send();
         if (!res.ok) throw new Error(String(res.status));
         form.reset();
         form.classList.remove('was-validated');
-        showStatus('success', 'Merci. Votre demande est bien envoyée. Nous vous recontactons par téléphone.');
+        // Confirmation à la place du formulaire
+        form.hidden = true;
+        done.hidden = false;
+        done.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+        done.focus({ preventScroll: true });
       } catch (err) {
         showStatus('error', "L'envoi n'a pas abouti. Utilisez le bouton WhatsApp ou écrivez-nous à diawdesigndeco@gmail.com.");
       } finally {
         submitBtn.disabled = false;
+        submitBtn.innerHTML = submitLabel;
       }
+    });
+
+    $('[data-form-again]').addEventListener('click', () => {
+      done.hidden = true;
+      form.hidden = false;
+      $('#f-nom', form).focus();
     });
 
     // Arrivée depuis la page Modèles (« Demander ce modèle ») : préremplissage
