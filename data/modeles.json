@@ -40,7 +40,7 @@
   },
   "facade": {
     "titre": "Habillage façade",
-    "intro": "Bandeaux, panneaux et cadres de vitrine qui donnent son identité à l'officine dans la rue.",
+    "intro": "Lambris aluminium, Alucobond et cadres qui donnent son identité à l'officine dans la rue.",
     "modeles": [
       { "nom": "Habillage composite cuivré", "image": "assets/img/realisations/facade-fleuve-nouvelle-l.jpg", "description": "Panneaux composite aluminium cuivrés, bandeau à lames et cadre autour des vitrines.", "options": ["Composite aluminium", "Bandeau à lames"], "nouveau": false, "provisoire": false, "cadrage": "center 45%", "zoom": 1 },
       { "nom": "Façade verte et bandeau anthracite", "image": "assets/img/realisations/facade-faa-ikhal-makhis-l.jpg", "description": "Panneaux verts, bandeau anthracite, cadres de vitrine et appliques lumineuses.", "options": ["Panneaux", "Appliques"], "nouveau": false, "provisoire": false, "cadrage": "60% 60%", "zoom": 1 },
