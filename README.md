@@ -24,8 +24,7 @@ admin/
     uploads/            photos envoyées depuis l'administration
     modeles/            photos de modèles ajoutées à la main (optionnel)
     placeholders/       visuels provisoires (réalisations, portraits, modèles)
-    logo/               ← déposer ici les PNG du logo
-    favicon.svg         provisoire
+    logo/               logo (SVG) et symbole du kit officiel
 netlify.toml          configuration de déploiement Netlify
 ```
 
@@ -64,14 +63,14 @@ Le diaporama du hero, les textes des sections et le SAV restent modifiables dans
 
 ---
 
-## Logo — fichiers attendus
-| Fichier | Usage | Fond |
+## Logo
+| Fichier | Usage | Source (kit du logo) |
 |---|---|---|
-| `assets/img/logo/logo.png` | Header et footer de toutes les pages (version horizontale) | blanc |
-| `assets/img/logo/logo-symbole.png` | Favicon (remplacer `favicon.svg` dans `<head>`) | — |
+| `assets/img/logo/logo.svg` | Header et footer de toutes les pages, logo de l'admin | `DDD_logo-horizontal_couleur.svg` |
+| `assets/img/logo/symbole.svg` | Icône d'onglet (favicon) | `DDD_symbole_couleur.svg` |
+| `assets/img/logo/logo-vertical.svg` | Version principale, réservée (non utilisée dans les pages) | `DDD_logo-vertical_couleur.svg` |
 
-Tant qu'un fichier manque, un emplacement « LOGO » en pointillés s'affiche. Le header et le footer sont sur fond **blanc**, conformément aux fonds autorisés par la charte (le logo n'est jamais posé sur le vert ou l'orange).
-Exporter les PNG à 2× la hauteur affichée (header : 104 px de haut ; footer : 88 px).
+Le header et le footer sont sur fond **blanc** : la version « couleur » est la bonne. La version horizontale est utilisée en en-tête, car le nom de la version verticale serait illisible à 44 px de haut. Fichiers vectoriels : nets sur tous les écrans, sans export à faire.
 
 ## Diaporama du hero
 Le fond du hero fait défiler 11 photos de réalisations (fondu de 1,4 s, zoom lent, une photo toutes les 6 s). Le défilement se met en pause hors écran, et il est désactivé si l'appareil demande moins d'animations ; un bouton pause est toujours disponible.

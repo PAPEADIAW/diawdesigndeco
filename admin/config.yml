@@ -18,7 +18,7 @@ local_backend: true
 
 locale: fr
 site_url: https://diawdesigndeco.netlify.app
-logo_url: /assets/img/logo/logo.png
+logo_url: /assets/img/logo/logo.svg
 
 # Photos envoyées depuis l'administration
 media_folder: assets/img/uploads
