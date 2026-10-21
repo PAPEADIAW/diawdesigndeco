@@ -238,7 +238,12 @@
       status.className = 'form__status';
       try {
         const res = await send();
-        if (!res.ok) throw new Error(String(res.status));
+        if (!res.ok) {
+          // Formspree renvoie le détail des erreurs (ex. e-mail invalide) : on l'affiche s'il existe
+          const detail = await res.json().catch(() => null);
+          const messages = detail && Array.isArray(detail.errors) ? detail.errors.map((x) => x.message).filter(Boolean) : [];
+          throw new Error(messages.join(' '));
+        }
         form.reset();
         form.classList.remove('was-validated');
         // Confirmation à la place du formulaire
@@ -247,7 +252,8 @@
         done.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
         done.focus({ preventScroll: true });
       } catch (err) {
-        showStatus('error', "L'envoi n'a pas abouti. Utilisez le bouton WhatsApp ou écrivez-nous à diawdesigndeco@gmail.com.");
+        const why = err && err.message ? ` (${err.message})` : '';
+        showStatus('error', `L'envoi n'a pas abouti${why}. Utilisez le bouton WhatsApp ou écrivez-nous à diawdesigndeco@gmail.com.`);
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = submitLabel;
