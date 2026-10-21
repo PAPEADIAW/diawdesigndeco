@@ -1181,3 +1181,4 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
 .form-done p { font-size: var(--fs-lead); color: var(--text-muted); }
 .form-done .btn { margin-top: 8px; }
 @media (min-width: 1024px) { .contact > .form, .contact > .form-done { grid-column: 1; grid-row: 1; } }
+#pole-enseignes .card--photo__bg { object-position: 58% 55%; }

@@ -154,4 +154,4 @@ Rédigés au plus près du brief, sans superlatifs. À confirmer avec la directi
 Pour viser > 90 sur mobile une fois les vraies photos en place : les compresser (squoosh.app), respecter les poids indiqués ci-dessus, puis vérifier avec PageSpeed Insights.
 
 ## Mise à jour des styles et scripts
-Les liens vers `assets/css/main.css` et `assets/js/*.js` portent un numéro de version (`?v=20261021e`). Après une modification de ces fichiers, changer ce numéro dans les 4 pages HTML (par ex. `?v=20261105`) : tous les navigateurs rechargent alors la nouvelle version. `netlify.toml` demande en plus au navigateur de vérifier ces fichiers à chaque visite ; seules les images restent en cache 7 jours.
+Les liens vers `assets/css/main.css` et `assets/js/*.js` portent un numéro de version (`?v=20261021f`). Après une modification de ces fichiers, changer ce numéro dans les 4 pages HTML (par ex. `?v=20261105`) : tous les navigateurs rechargent alors la nouvelle version. `netlify.toml` demande en plus au navigateur de vérifier ces fichiers à chaque visite ; seules les images restent en cache 7 jours.
