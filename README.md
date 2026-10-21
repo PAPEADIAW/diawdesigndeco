@@ -90,11 +90,18 @@ L'album affiche toutes les photos (visionneuse plein écran : flèches, clavier,
 **À compléter :** 11 albums sont en place. 3 pharmacies sont nommées d'après leur enseigne (Fleuve Nouvelle, Adja Daba Diagne, Faa Ikhal Makhis). Les 8 autres, marquées `aConfirmer: true`, ont été regroupées d'après le style des photos : il faut indiquer le nom, la ville et vérifier le regroupement. Pour atteindre 10 références par filtre, ajouter des pharmacies depuis `/admin`.
 
 ## Service après-vente (`sav.html`)
-Le client choisit l'équipement (6 boutons), le problème et la priorité, puis saisit ses coordonnées. Le bouton « Envoyer au SAV par WhatsApp » ouvre WhatsApp avec un message déjà rédigé et un **numéro de suivi** `SAV-AAAAMMJJ-1234`. Le client envoie le message depuis son propre WhatsApp, puis ajoute ses photos : le SAV reçoit la demande et **répond dans la même conversation**.
+Le client **coche un ou plusieurs équipements** (6 cartes), **un ou plusieurs problèmes par équipement**, la priorité, ajoute **jusqu'à 5 photos** (prises avec le téléphone ou choisies dans la galerie, réduites automatiquement à 1 600 px avant l'envoi), puis saisit ses coordonnées.
+Au clic sur « Envoyer au SAV par WhatsApp » :
+1. la demande et les photos sont **enregistrées par Netlify Forms** (formulaire `sav`) avec le **numéro de suivi** `SAV-AAAAMMJJ-1234` ;
+2. WhatsApp s'ouvre vers le SAV avec le message déjà rédigé ; le client l'envoie depuis son propre WhatsApp et le SAV **répond dans la même conversation**.
+Si l'envoi des photos échoue, le message WhatsApp le signale et invite le client à les joindre dans la conversation. Sur téléphone, un bouton « Partager les photos sur WhatsApp » permet aussi de les envoyer directement.
+
+**À activer une fois dans Netlify** : *Forms* → **Enable form detection**, puis redéployer. Les demandes et leurs photos apparaissent dans *Forms → sav* ; *Forms → Form notifications* permet d'être prévenu par e-mail à chaque demande. Vérifier la limite de fichiers reçus par mois de votre offre Netlify.
+
 - **Suivi** : le bloc « Suivre une demande » envoie « je souhaite connaître le suivi de ma demande SAV-… » au SAV. Le dernier numéro est mémorisé dans le navigateur du client.
-- **Lien direct vers un équipement** : `sav.html?equipement=croix` (valeurs : `croix`, `enseigne`, `mobilier`, `facade`, `eclairage`, `autre`). Pratique à imprimer en QR code sur l'équipement posé.
-- **Configuration** (en tête de `assets/js/sav.js`) : `SAV_WHATSAPP` (numéro qui reçoit les demandes, actuellement 221763655888, soit le +221 76 365 58 88), liste des équipements, des problèmes et des priorités.
-- Aucune donnée n'est stockée sur un serveur : tout passe par WhatsApp. Pour garder une trace côté SAV, épingler ou étiqueter les conversations (WhatsApp Business : étiquettes « Nouveau », « En cours », « Résolu »).
+- **Lien direct vers un ou plusieurs équipements** : `sav.html?equipement=croix` ou `sav.html?equipement=croix,enseigne` (valeurs : `croix`, `enseigne`, `mobilier`, `facade`, `eclairage`, `autre`). Pratique à imprimer en QR code sur l'équipement posé.
+- **Configuration** (en tête de `assets/js/sav.js`) : `SAV_WHATSAPP` (numéro qui reçoit les demandes, actuellement 221777494934, soit le +221 77 749 49 34), liste des équipements, des problèmes et des priorités.
+- Pour garder une trace côté SAV, épingler ou étiqueter les conversations (WhatsApp Business : étiquettes « Nouveau », « En cours », « Résolu »).
 
 ## Placeholders à remplacer
 | # | Emplacement | Fichier actuel | Format conseillé |

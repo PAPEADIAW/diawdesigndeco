@@ -1,12 +1,17 @@
 /* DIAW DESIGN DÉCO — Service après-vente
-   La demande est mise en forme puis ouverte dans WhatsApp (wa.me) vers le numéro du SAV.
-   Le client l'envoie depuis son propre WhatsApp : le SAV lui répond dans la même conversation. */
+   1. Le client coche un ou plusieurs équipements, les problèmes constatés, ajoute des photos.
+   2. La demande et les photos sont enregistrées par Netlify Forms (formulaire « sav »).
+   3. WhatsApp s'ouvre vers le SAV avec la demande rédigée et le numéro de suivi :
+      le SAV répond au client dans la même conversation. */
 (() => {
   'use strict';
 
   /* ==================== CONFIGURATION (modifiable) ==================== */
   // Numéro WhatsApp du service après-vente, format international sans « + » ni espaces
-  const SAV_WHATSAPP = '221763655888';
+  const SAV_WHATSAPP = '221777494934';
+  const MAX_PHOTOS = 5;
+  const PHOTO_MAX_SIDE = 1600;   // pixels, côté le plus long après réduction
+  const PHOTO_QUALITY = 0.78;    // qualité JPEG après réduction
 
   // Équipements (boutons de l'étape 1) et problèmes proposés (étape 2)
   const CATEGORIES = [
@@ -41,20 +46,28 @@
   const prioWrap = $('[data-priorities]');
   const progress = $('[data-sav-progress]');
   const done = $('[data-sav-done]');
+  const photoInput = $('#s-photos');
+  const photoList = $('[data-photos]');
+  const photoError = $('[data-error="photos"]');
+  const submitBtn = $('[data-sav-submit]');
+  const submitLabel = $('[data-sav-submit-label]');
+  const shareBtn = $('[data-sav-share]');
 
   const waLink = (text) => `https://wa.me/${SAV_WHATSAPP}?text=${encodeURIComponent(text)}`;
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const plural = (n, w) => `${n} ${w}${n > 1 ? 's' : ''}`;
 
   const storage = {
     get() { try { return localStorage.getItem('ddd-sav-last'); } catch (e) { return null; } },
     set(v) { try { localStorage.setItem('ddd-sav-last', v); } catch (e) { /* stockage indisponible */ } },
   };
 
-  /* ---------- Boutons de choix (radios natifs, accessibles au clavier) ---------- */
-  const radio = (name, value, labelHtml, cls, checked) => {
+  /* ---------- Boutons de choix (cases et radios natifs, accessibles au clavier) ---------- */
+  const choice = (type, name, value, labelHtml, cls, checked) => {
     const label = document.createElement('label');
     label.className = cls;
     const input = document.createElement('input');
-    input.type = 'radio'; input.name = name; input.value = value; input.className = 'sr-only';
+    input.type = type; input.name = name; input.value = value; input.className = 'sr-only';
     if (checked) input.checked = true;
     const span = document.createElement('span');
     span.className = `${cls}__inner`;
@@ -64,39 +77,131 @@
   };
 
   CATEGORIES.forEach((c) => {
-    catWrap.append(radio('categorie', c.id,
-      `<svg viewBox="0 0 24 24" aria-hidden="true">${c.icon}</svg><span>${c.label}</span>`, 'choice'));
+    catWrap.append(choice('checkbox', 'equipement', c.id,
+      `<span class="choice__check" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true">${c.icon}</svg><span>${c.label}</span>`, 'choice'));
   });
   PRIORITES.forEach((p) => {
-    prioWrap.append(radio('priorite', p.id, `<span class="lozenge" aria-hidden="true"></span>${p.label}`, 'chip-choice', p.defaut));
+    prioWrap.append(choice('radio', 'priorite', p.id, `<span class="lozenge" aria-hidden="true"></span>${p.label}`, 'chip-choice', p.defaut));
   });
 
-  const renderProblems = (catId) => {
-    const cat = CATEGORIES.find((c) => c.id === catId);
+  const selectedCats = () => CATEGORIES.filter((c) => $(`input[name="equipement"][value="${c.id}"]`, form).checked);
+  const checkedProblems = (catId) => $$(`input[name="pb-${catId}"]:checked`, form).map((i) => i.value);
+
+  // Un groupe de problèmes par équipement coché ; les cases déjà cochées sont conservées
+  const renderProblems = () => {
+    const keep = {};
+    CATEGORIES.forEach((c) => { keep[c.id] = checkedProblems(c.id); });
+    const cats = selectedCats();
     probWrap.replaceChildren();
-    cat.problemes.forEach((p) => {
-      const safe = p.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-      probWrap.append(radio('probleme', p, `<span class="lozenge" aria-hidden="true"></span>${safe}`, 'chip-choice'));
+    if (!cats.length) {
+      probWrap.innerHTML = '<p class="sav__hint">Choisissez d\'abord un équipement.</p>';
+      return;
+    }
+    cats.forEach((c) => {
+      const group = document.createElement('div');
+      group.className = 'problem-group';
+      group.setAttribute('role', 'group');
+      group.setAttribute('aria-label', `Problèmes — ${c.label}`);
+      const title = document.createElement('p');
+      title.className = 'problem-group__title';
+      title.textContent = c.label;
+      const chips = document.createElement('div');
+      chips.className = 'chip-choices';
+      c.problemes.forEach((p) => chips.append(choice('checkbox', `pb-${c.id}`, p,
+        `<span class="lozenge" aria-hidden="true"></span>${esc(p)}`, 'chip-choice', keep[c.id].includes(p))));
+      group.append(title, chips);
+      probWrap.append(group);
     });
-    probWrap.setAttribute('role', 'radiogroup');
-    probWrap.setAttribute('aria-label', `Problème — ${cat.label}`);
   };
+
+  /* ---------- Photos : réduction côté navigateur avant l'envoi ---------- */
+  let photos = []; // { blob, url, name }
+
+  const loadImage = (file) => new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => resolve({ img, url });
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('image illisible')); };
+    img.src = url;
+  });
+
+  const shrink = async (file) => {
+    const { img, url } = await loadImage(file);
+    const ratio = Math.min(1, PHOTO_MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.round(img.naturalWidth * ratio);
+    const h = Math.round(img.naturalHeight * ratio);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+    const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', PHOTO_QUALITY));
+    if (!blob) throw new Error('conversion impossible');
+    return blob;
+  };
+
+  const renderPhotos = () => {
+    photoList.replaceChildren(...photos.map((p, i) => {
+      const li = document.createElement('li');
+      li.className = 'photo-item';
+      const img = document.createElement('img');
+      img.src = p.url; img.alt = `Photo ${i + 1}`;
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'photo-item__del';
+      del.setAttribute('aria-label', `Retirer la photo ${i + 1}`);
+      del.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+      del.addEventListener('click', () => {
+        URL.revokeObjectURL(p.url);
+        photos.splice(i, 1);
+        renderPhotos();
+        photoInput.focus();
+      });
+      const size = document.createElement('span');
+      size.className = 'photo-item__size';
+      size.textContent = `${Math.max(1, Math.round(p.blob.size / 1024))} Ko`;
+      li.append(img, del, size);
+      return li;
+    }));
+    $('.photo-drop strong').textContent = photos.length ? `Ajouter des photos (${photos.length}/${MAX_PHOTOS})` : 'Ajouter des photos';
+  };
+
+  photoInput.addEventListener('change', async () => {
+    const files = [...photoInput.files].filter((f) => f.type.startsWith('image/'));
+    photoInput.value = '';
+    photoError.classList.remove('is-shown');
+    const room = MAX_PHOTOS - photos.length;
+    if (files.length > room) {
+      photoError.textContent = `Maximum ${MAX_PHOTOS} photos : ${plural(files.length - room, 'photo')} non ajoutée${files.length - room > 1 ? 's' : ''}.`;
+      photoError.classList.add('is-shown');
+    }
+    for (const file of files.slice(0, Math.max(0, room))) {
+      try {
+        const blob = await shrink(file);
+        photos.push({ blob, url: URL.createObjectURL(blob) });
+      } catch (e) {
+        photoError.textContent = `« ${file.name} » n'a pas pu être lue. Essayez une autre photo.`;
+        photoError.classList.add('is-shown');
+      }
+    }
+    renderPhotos();
+  });
 
   /* ---------- Progression ---------- */
   const required = ['officine', 'nom', 'telephone', 'ville'];
   const updateProgress = () => {
     const d = new FormData(form);
-    const steps = [d.get('categorie'), d.get('probleme'), ...required.map((k) => String(d.get(k) || '').trim())];
-    const ratio = steps.filter(Boolean).length / steps.length;
-    progress.style.transform = `scaleX(${ratio})`;
+    const cats = selectedCats();
+    const steps = [cats.length > 0, cats.some((c) => checkedProblems(c.id).length > 0),
+      ...required.map((k) => String(d.get(k) || '').trim() !== '')];
+    progress.style.transform = `scaleX(${steps.filter(Boolean).length / steps.length})`;
   };
 
   form.addEventListener('change', (e) => {
-    if (e.target.name === 'categorie') {
-      renderProblems(e.target.value);
-      $('[data-error="categorie"]').classList.remove('is-shown');
+    if (e.target.name === 'equipement') {
+      renderProblems();
+      if (selectedCats().length) $('[data-error="categorie"]').classList.remove('is-shown');
     }
-    if (e.target.name === 'probleme') $('[data-error="probleme"]').classList.remove('is-shown');
+    if (e.target.name && e.target.name.startsWith('pb-')) $('[data-error="probleme"]').classList.remove('is-shown');
     updateProgress();
   });
   form.addEventListener('input', updateProgress);
@@ -105,39 +210,76 @@
   const makeRef = () => {
     const now = new Date();
     const ymd = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
-    const rnd = String(Math.floor(1000 + Math.random() * 9000));
-    return `SAV-${ymd}-${rnd}`;
+    return `SAV-${ymd}-${String(Math.floor(1000 + Math.random() * 9000))}`;
+  };
+
+  // Envoi à Netlify Forms (demande + photos). Renvoie true si le SAV l'a bien reçue.
+  const saveToNetlify = async (fields, ref) => {
+    const fd = new FormData();
+    Object.entries(fields).forEach(([k, v]) => fd.append(k, v));
+    photos.forEach((p, i) => fd.append(`photo${i + 1}`, p.blob, `${ref}-photo${i + 1}.jpg`));
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 45000);
+    try {
+      const res = await fetch('/', { method: 'POST', body: fd, signal: ctrl.signal });
+      return res.ok;
+    } catch (e) {
+      return false;
+    } finally {
+      clearTimeout(timer);
+    }
   };
 
   /* ---------- Envoi ---------- */
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const d = new FormData(form);
     const get = (k) => String(d.get(k) || '').trim();
-    let ok = true;
+    const cats = selectedCats();
+    const withProblems = cats.map((c) => ({ c, pbs: checkedProblems(c.id) }));
+    const anyProblem = withProblems.some((x) => x.pbs.length);
 
-    ['categorie', 'probleme'].forEach((k) => {
-      const err = $(`[data-error="${k}"]`);
-      err.classList.toggle('is-shown', !get(k));
-      if (!get(k)) ok = false;
-    });
-    if (!form.checkValidity()) { form.classList.add('was-validated'); ok = false; }
-    if (!ok) {
-      const first = !get('categorie') ? $('input[name="categorie"]', form)
-        : !get('probleme') ? $('input[name="probleme"]', form)
+    $('[data-error="categorie"]').classList.toggle('is-shown', !cats.length);
+    $('[data-error="probleme"]').classList.toggle('is-shown', cats.length > 0 && !anyProblem);
+    const fieldsOk = form.checkValidity();
+    if (!fieldsOk) form.classList.add('was-validated');
+    if (!cats.length || !anyProblem || !fieldsOk) {
+      const first = !cats.length ? $('input[name="equipement"]', form)
+        : !anyProblem ? $('input[name^="pb-"]', form)
         : $(':invalid:not(fieldset)', form);
       if (first) first.focus();
       return;
     }
 
-    const cat = CATEGORIES.find((c) => c.id === get('categorie'));
     const prio = PRIORITES.find((p) => p.id === get('priorite')) || PRIORITES[1];
     const ref = makeRef();
+    const equipements = cats.map((c) => c.label).join(', ');
+    const problemes = withProblems.map(({ c, pbs }) => `${c.label} : ${pbs.length ? pbs.join(', ') : 'à préciser'}`).join(' | ');
+
+    // Fenêtre ouverte tout de suite (pendant le clic) pour ne pas être bloquée par le navigateur
+    const win = window.open('', '_blank');
+    submitBtn.disabled = true;
+    submitLabel.textContent = photos.length ? `Envoi de ${plural(photos.length, 'photo')}…` : 'Envoi en cours…';
+
+    const saved = await saveToNetlify({
+      'form-name': 'sav', 'bot-field': '', reference: ref, equipements, problemes,
+      priorite_libelle: prio.label, officine: get('officine'), nom: get('nom'), telephone: get('telephone'),
+      ville: get('ville'), annee: get('annee'), dispo: get('dispo'), description: get('description'),
+    }, ref);
+
+    let photoLine = '';
+    if (photos.length) {
+      photoLine = saved
+        ? `${plural(photos.length, 'photo')} transmise${photos.length > 1 ? 's' : ''} au SAV avec ce dossier.`
+        : `J'envoie ${plural(photos.length, 'photo')} à la suite de ce message.`;
+    } else {
+      photoLine = 'Photos envoyées à la suite de ce message.';
+    }
+
     const lines = [
       `*Demande SAV — ${ref}*`,
       '',
-      `*Équipement :* ${cat.label}`,
-      `*Problème :* ${get('probleme')}`,
+      ...withProblems.map(({ c, pbs }) => `*${c.label} :* ${pbs.length ? pbs.join(', ') : 'à préciser'}`),
       `*Priorité :* ${prio.label}`,
       '',
       `*Officine :* ${get('officine')}`,
@@ -148,16 +290,36 @@
       get('dispo') ? `*Disponibilité :* ${get('dispo')}` : null,
       get('description') ? `\n*Description :*\n${get('description')}` : null,
       '',
-      'Photos envoyées à la suite de ce message.',
+      photoLine,
     ].filter((l) => l !== null);
     const url = waLink(lines.join('\n'));
 
+    if (win) { win.opener = null; win.location.href = url; }
     storage.set(ref);
-    window.open(url, '_blank', 'noopener');
 
     // Confirmation
     $('[data-sav-ref]').textContent = ref;
     $('[data-sav-reopen]').href = url;
+    const status = $('[data-sav-photo-status]');
+    if (saved) {
+      status.className = 'sav__photo-status is-ok';
+      status.textContent = photos.length
+        ? `Demande et ${plural(photos.length, 'photo')} bien reçues par le SAV.`
+        : 'Demande bien reçue par le SAV.';
+    } else {
+      status.className = 'sav__photo-status is-warn';
+      status.textContent = photos.length
+        ? "Les photos n'ont pas pu être transmises : ajoutez-les dans la conversation WhatsApp."
+        : 'Envoyez le message WhatsApp pour transmettre votre demande.';
+    }
+    // Partage direct des photos dans WhatsApp (téléphones compatibles)
+    const files = photos.map((p, i) => new File([p.blob], `${ref}-photo${i + 1}.jpg`, { type: 'image/jpeg' }));
+    const canShareFiles = files.length && navigator.canShare && navigator.canShare({ files });
+    shareBtn.hidden = !canShareFiles;
+    shareBtn.onclick = canShareFiles ? () => navigator.share({ files, text: `Photos — ${ref}` }).catch(() => {}) : null;
+
+    submitBtn.disabled = false;
+    submitLabel.textContent = 'Envoyer au SAV par WhatsApp';
     form.hidden = true;
     done.hidden = false;
     done.focus();
@@ -167,11 +329,14 @@
   $('[data-sav-new]').addEventListener('click', () => {
     form.reset();
     form.classList.remove('was-validated');
-    probWrap.innerHTML = '<p class="sav__hint">Choisissez d\'abord un équipement.</p>';
+    photos.forEach((p) => URL.revokeObjectURL(p.url));
+    photos = [];
+    renderPhotos();
+    renderProblems();
     done.hidden = true;
     form.hidden = false;
     updateProgress();
-    $('input[name="categorie"]', form).focus();
+    $('input[name="equipement"]', form).focus();
   });
 
   /* ---------- Suivi d'une demande existante ---------- */
@@ -198,8 +363,11 @@
   showLast();
   updateProgress();
 
-  // Accès direct à un équipement : sav.html?equipement=croix
-  const pre = new URLSearchParams(location.search).get('equipement');
-  const preInput = pre && $(`input[name="categorie"][value="${CSS.escape(pre)}"]`, form);
-  if (preInput) { preInput.checked = true; renderProblems(pre); updateProgress(); }
+  // Accès direct à un équipement : sav.html?equipement=croix (plusieurs : ?equipement=croix,enseigne)
+  const pre = (new URLSearchParams(location.search).get('equipement') || '').split(',').filter(Boolean);
+  pre.forEach((id) => {
+    const input = $(`input[name="equipement"][value="${CSS.escape(id)}"]`, form);
+    if (input) input.checked = true;
+  });
+  if (pre.length) { renderProblems(); updateProgress(); }
 })();
