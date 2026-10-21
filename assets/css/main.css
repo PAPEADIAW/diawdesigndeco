@@ -1141,3 +1141,27 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
 #pole-mobilier .card--photo__bg { object-position: 30% 60%; }
 @media (min-width: 1024px) { .hero__aside { align-self: end; } }
 .stat__value--mid { font-size: clamp(1.35rem, 1rem + 1.6vw, 2.4rem); }
+
+/* ---------- 22. Témoignages ---------- */
+.testimonials[hidden] { display: none; }
+.testimonials__grid { display: grid; gap: 20px; }
+@media (min-width: 900px) { .testimonials__grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+.testimonial-card {
+  position: relative; display: flex; flex-direction: column; gap: 18px;
+  padding: 32px 28px 28px; background: var(--gray-light); border-radius: var(--radius);
+  border-top: 4px solid var(--green);
+}
+.testimonial-card::before {
+  content: "“"; position: absolute; top: 4px; right: 22px;
+  font-family: var(--font-title); font-weight: 700; font-size: 5rem; line-height: 1; color: rgba(43, 153, 66, .18);
+}
+.testimonial-card figure { display: flex; flex-direction: column; gap: 22px; flex: 1; }
+.testimonial-card blockquote p { font-size: 1.0625rem; line-height: 1.6; color: var(--text-strong); }
+.testimonial-card__who { display: flex; align-items: center; gap: 14px; margin-top: auto; }
+.testimonial-card__photo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; }
+.testimonial-card__initials {
+  display: grid; place-items: center; flex: none; width: 56px; height: 56px; border-radius: 50%;
+  font-family: var(--font-title); font-weight: 500; color: var(--white); background: var(--green-text);
+}
+.testimonial-card__id strong { display: block; font-family: var(--font-title); font-weight: 500; color: var(--text-strong); }
+.testimonial-card__id span { display: block; font-size: .875rem; font-style: italic; color: var(--text-muted); }

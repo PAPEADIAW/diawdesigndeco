@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;700&display=swap">
   <link rel="preload" as="image" href="assets/img/realisations/parapharmacie-podium-2-l.jpg" imagesrcset="assets/img/realisations/parapharmacie-podium-2-s.jpg 800w, assets/img/realisations/parapharmacie-podium-2-l.jpg 1600w" imagesizes="100vw" fetchpriority="high">
-  <link rel="stylesheet" href="assets/css/main.css?v=20261021b">
+  <link rel="stylesheet" href="assets/css/main.css?v=20261021c">
 
   <script type="application/ld+json">
   {
@@ -356,16 +356,18 @@
           <button class="btn btn--outline-dark" type="button" data-projects-more hidden>Voir plus de réalisations</button>
         </div>
         <noscript><p class="section__lead">Activez JavaScript pour afficher nos réalisations.</p></noscript>
+      </div>
+    </section>
 
-        <!-- TÉMOIGNAGE (masqué tant qu'il n'y a pas de témoignage réel) — retirer les commentaires pour l'activer.
-        <figure class="testimonial reveal">
-          <blockquote><p>« Citation exacte du pharmacien. »</p></blockquote>
-          <figcaption><strong>Dr Prénom Nom</strong> · Pharmacie X, Ville</figcaption>
-          <dl class="testimonial__stats">
-            <div><dt>Chiffre réel</dt><dd>Résultat mesuré</dd></div>
-          </dl>
-        </figure>
-        -->
+    <!-- ============ TÉMOIGNAGES ============ -->
+    <!-- Contenu : data/temoignages.json (modifiable depuis /admin). Section masquée tant que la liste est vide. -->
+    <section class="section testimonials" id="temoignages" aria-labelledby="temoignages-title" hidden data-testimonials>
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="eyebrow"><span class="lozenge" aria-hidden="true"></span>Témoignages</p>
+          <h2 id="temoignages-title">Ils nous ont confié leur officine.</h2>
+        </header>
+        <ul class="testimonials__grid" data-testimonials-list></ul>
       </div>
     </section>
 
@@ -588,8 +590,9 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.4-4A8 8 0 1 1 8.3 19z"/><path d="M9 9.5c.5 2.2 2.3 4 4.5 4.5l1-1.2 2 .9c-.3 1.2-1.3 1.8-2.5 1.6A7 7 0 0 1 8.2 10c-.2-1.2.4-2.2 1.6-2.5l.9 2z"/></svg>
   </a>
 
-  <script src="assets/js/donnees.js?v=20261021b" defer></script>
-  <script src="assets/js/main.js?v=20261021b" defer></script>
-  <script src="assets/js/realisations.js?v=20261021b" defer></script>
+  <script src="assets/js/donnees.js?v=20261021c" defer></script>
+  <script src="assets/js/main.js?v=20261021c" defer></script>
+  <script src="assets/js/realisations.js?v=20261021c" defer></script>
+  <script src="assets/js/temoignages.js?v=20261021c" defer></script>
 </body>
 </html>

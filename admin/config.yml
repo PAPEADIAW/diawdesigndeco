@@ -193,3 +193,29 @@ collections:
                   - { name: provisoire, label: "Photo provisoire", widget: boolean, default: false, required: false, hint: "Affiche la mention « Photo provisoire »." }
                   - { name: cadrage, label: "Cadrage (avancé)", widget: string, required: false, hint: "Point à mettre en avant, ex. 20% 50% (gauche, milieu). Laisser vide pour centrer." }
                   - { name: zoom, label: "Zoom (avancé)", widget: number, value_type: float, min: 1, max: 3, step: 0.1, default: 1, required: false }
+
+  # ------------------------------------------------------------------
+  - name: temoignages
+    label: Témoignages
+    description: "Avis de pharmaciens affichés sur l'accueil (3 au maximum). La section reste masquée tant que la liste est vide."
+    editor: { preview: false }
+    files:
+      - name: liste
+        label: Témoignages clients
+        file: data/temoignages.json
+        fields:
+          - name: temoignages
+            label: Témoignages
+            label_singular: témoignage
+            widget: list
+            max: 3
+            summary: "{{fields.nom}} — {{fields.officine}}"
+            hint: "Uniquement des propos réels, avec l'accord de la personne. Glissez pour changer l'ordre."
+            fields:
+              - { name: citation, label: Citation, widget: text, hint: "Les mots exacts du pharmacien, 2 à 4 phrases." }
+              - { name: nom, label: Nom, widget: string, hint: "ex. Dr Awa Ndiaye" }
+              - { name: fonction, label: Fonction, widget: string, required: false, default: "Pharmacien titulaire" }
+              - { name: officine, label: Officine, widget: string }
+              - { name: ville, label: Ville, widget: string, required: false }
+              - { name: photo, label: Photo (facultative), widget: image, required: false, choose_url: false, hint: "Portrait carré. Sans photo, les initiales sont affichées." }
+              - { name: album, label: "Album lié (facultatif)", widget: string, required: false, hint: "Identifiant de l'album de la pharmacie, ex. fleuve-nouvelle : ajoute un lien « Voir la réalisation »." }

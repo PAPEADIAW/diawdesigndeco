@@ -89,6 +89,9 @@ L'album affiche toutes les photos (visionneuse plein écran : flèches, clavier,
 
 **À compléter :** 11 albums sont en place. 3 pharmacies sont nommées d'après leur enseigne (Fleuve Nouvelle, Adja Daba Diagne, Faa Ikhal Makhis). Les 8 autres, marquées `aConfirmer: true`, ont été regroupées d'après le style des photos : il faut indiquer le nom, la ville et vérifier le regroupement. Pour atteindre 10 références par filtre, ajouter des pharmacies depuis `/admin`.
 
+## Témoignages
+La section « Témoignages » de l'accueil (entre Réalisations et À propos) affiche **jusqu'à 3 avis** lus dans `data/temoignages.json`. Elle reste **invisible tant que la liste est vide**. Pour chaque témoignage : citation, nom, fonction, officine, ville, photo facultative (sinon les initiales) et album lié facultatif (lien « Voir la réalisation »). À remplir depuis `/admin` → **Témoignages**, uniquement avec des propos réels et l'accord de la personne.
+
 ## Service après-vente (`sav.html`)
 Le client **coche un ou plusieurs équipements** (6 cartes), **un ou plusieurs problèmes par équipement**, la priorité, puis saisit ses coordonnées.
 Au clic sur « Envoyer au SAV par WhatsApp » :
@@ -110,7 +113,7 @@ Au clic sur « Envoyer au SAV par WhatsApp » :
 | 8–9 | Portraits : `assets/img/equipe/pape-abdoulaye-diaw.jpg` et `assets/img/equipe/mamadou-diaw.jpg` (portrait provisoire affiché tant qu'ils manquent) | `assets/img/equipe/` | 800×1000 (4:5), < 150 Ko |
 | 10 | Image de partage réseaux sociaux | `img/og-image.jpg` (absente) | 1200×630 JPG |
 | 11 | Coordonnées GPS exactes de la carte (Pikine, approximatives) | attribut `data-src` de `.map` | — |
-| 12 | Témoignage client (bloc commenté, masqué) | `index.html`, section Réalisations | citation + chiffres réels |
+| 12 | 3 témoignages de pharmaciens (section masquée tant que vide) | `/admin` → Témoignages (ou `data/temoignages.json`) | citation exacte + accord de la personne |
 | 13 | Délais indicatifs par étape (commentaire `DÉLAI À COMPLÉTER`) | section Méthode | — |
 
 Pour une photo, utiliser ce modèle (le navigateur choisit le format le plus léger) :
@@ -145,4 +148,4 @@ Rédigés au plus près du brief, sans superlatifs. À confirmer avec la directi
 Pour viser > 90 sur mobile une fois les vraies photos en place : les compresser (squoosh.app), respecter les poids indiqués ci-dessus, puis vérifier avec PageSpeed Insights.
 
 ## Mise à jour des styles et scripts
-Les liens vers `assets/css/main.css` et `assets/js/*.js` portent un numéro de version (`?v=20261021b`). Après une modification de ces fichiers, changer ce numéro dans les 4 pages HTML (par ex. `?v=20261105`) : tous les navigateurs rechargent alors la nouvelle version. `netlify.toml` demande en plus au navigateur de vérifier ces fichiers à chaque visite ; seules les images restent en cache 7 jours.
+Les liens vers `assets/css/main.css` et `assets/js/*.js` portent un numéro de version (`?v=20261021c`). Après une modification de ces fichiers, changer ce numéro dans les 4 pages HTML (par ex. `?v=20261105`) : tous les navigateurs rechargent alors la nouvelle version. `netlify.toml` demande en plus au navigateur de vérifier ces fichiers à chaque visite ; seules les images restent en cache 7 jours.
