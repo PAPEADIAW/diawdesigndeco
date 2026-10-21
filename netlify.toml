@@ -9,8 +9,26 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "SAMEORIGIN"
 
-# Cache 7 jours sur les ressources (les noms de fichiers ne sont pas versionnés)
+# Styles et scripts : le navigateur vérifie à chaque visite s'il existe une version plus récente
+# (réponse « 304 inchangé » très légère sinon). Évite d'afficher une page neuve avec d'anciens styles.
 [[headers]]
-  for = "/assets/*"
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Données modifiées depuis /admin : toujours fraîches
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Photos et logos : cache 7 jours
+[[headers]]
+  for = "/assets/img/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"
