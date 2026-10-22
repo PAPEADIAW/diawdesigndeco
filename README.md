@@ -49,7 +49,7 @@ L'équipe ajoute des **réalisations** (pharmacie, ville, prestations, photos) e
    - Authorization callback URL : `https://api.netlify.com/auth/done`
    - Copier le *Client ID* et générer un *Client secret*.
 4. **Netlify** : *Site configuration → Access & security → OAuth → Install provider → GitHub*, coller le Client ID et le Client secret.
-5. `admin/config.yml` pointe sur le dépôt `PAPEADIAW/diawdesigndeco` et le site `https://diawdesigndeco.netlify.app` (à modifier si l'un des deux change).
+5. `admin/config.yml` pointe sur le dépôt `PAPEADIAW/diawdesigndeco` et le site `https://diawdesigndeco.com` (domaine Squarespace pointé vers Netlify ; à modifier si l'un des deux change).
 6. **Équipe** : sur GitHub, *dépôt → Settings → Collaborators → Add people* (accès en écriture). Chaque personne crée son compte GitHub gratuit.
 7. Se connecter sur `https://adresse-du-site/admin/` avec « Se connecter avec GitHub ».
 
@@ -93,7 +93,7 @@ L'album affiche toutes les photos (visionneuse plein écran : flèches, clavier,
 Les demandes du formulaire « Décrivez-nous votre officine » sont envoyées par **Formspree** vers la boîte mail du compte Formspree (diawdesigndeco@gmail.com). Après l'envoi, le visiteur voit : « Merci, votre demande a bien été envoyée. Nous vous contacterons sous 24 heures. »
 
 **Configuration** : formulaire Formspree `mjygqabg` (`https://formspree.io/f/mjygqabg`), renseigné dans `index.html` sur la balise `<form id="devis-form">` (attributs `action` et `data-formspree`). Pour changer de formulaire, remplacer cet identifiant aux deux endroits. Si `data-formspree` est vidé, les demandes repassent par Netlify Forms.
-Chaque e-mail a pour objet « Nouvelle demande de devis — nom de l'officine ». Le champ caché `_gotcha` bloque les robots ; les erreurs signalées par Formspree (ex. e-mail invalide) s'affichent sous le formulaire. Conseillé dans Formspree : *Settings → Restrict to domain* → `diawdesigndeco.netlify.app`. L'offre gratuite limite le nombre d'envois par mois.
+Chaque e-mail a pour objet « Nouvelle demande de devis — nom de l'officine ». Le champ caché `_gotcha` bloque les robots ; les erreurs signalées par Formspree (ex. e-mail invalide) s'affichent sous le formulaire. Conseillé dans Formspree : *Settings → Restrict to domain* → `diawdesigndeco.com`. L'offre gratuite limite le nombre d'envois par mois.
 
 ## Témoignages
 La section « Témoignages » de l'accueil (entre Réalisations et À propos) affiche **jusqu'à 3 avis** lus dans `data/temoignages.json`. Elle reste **invisible tant que la liste est vide**. Pour chaque témoignage : citation, nom, fonction, officine, ville, photo facultative (sinon les initiales) et album lié facultatif (lien « Voir la réalisation »). À remplir depuis `/admin` → **Témoignages**, uniquement avec des propos réels et l'accord de la personne.
