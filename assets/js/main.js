@@ -201,7 +201,7 @@
     };
 
     // Formspree : identifiant du formulaire (ex. « xyzabcd ») dans l'attribut data-formspree du <form>.
-    // Les demandes arrivent par e-mail sur l'adresse du compte Formspree (diawdesigndeco@gmail.com).
+    // Les demandes arrivent par e-mail sur l'adresse du compte Formspree (voir les réglages du compte Formspree).
     // Sans identifiant, l'envoi passe par Netlify Forms.
     const formspreeId = (form.dataset.formspree || '').trim();
     const done = $('[data-form-done]');
@@ -253,7 +253,7 @@
         done.focus({ preventScroll: true });
       } catch (err) {
         const why = err && err.message ? ` (${err.message})` : '';
-        showStatus('error', `L'envoi n'a pas abouti${why}. Utilisez le bouton WhatsApp ou écrivez-nous à diawdesigndeco@gmail.com.`);
+        showStatus('error', `L'envoi n'a pas abouti${why}. Utilisez le bouton WhatsApp ou écrivez-nous à contact@diawdesigndeco.com.`);
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = submitLabel;
