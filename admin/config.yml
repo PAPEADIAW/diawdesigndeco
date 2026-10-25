@@ -39,7 +39,7 @@ collections:
             label: Pharmacies
             label_singular: pharmacie
             widget: list
-            summary: "{{fields.nom}} — {{fields.ville}}"
+            summary: "{{fields.nom}}"
             hint: "Glissez les pharmacies pour changer l'ordre : la première de la liste s'affiche en premier."
             fields:
               - { name: nom, label: Nom de la pharmacie, widget: string }
