@@ -201,7 +201,7 @@
     };
 
     // Formspree : identifiant du formulaire (ex. « xyzabcd ») dans l'attribut data-formspree du <form>.
-    // Les demandes arrivent par e-mail sur l'adresse du compte Formspree (voir les réglages du compte Formspree).
+    // Les demandes arrivent par e-mail sur l'adresse du compte Formspree (contact@diawdesigndeco.com, réglé dans Formspree).
     // Sans identifiant, l'envoi passe par Netlify Forms.
     const formspreeId = (form.dataset.formspree || '').trim();
     const done = $('[data-form-done]');
