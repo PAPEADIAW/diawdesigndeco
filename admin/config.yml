@@ -75,7 +75,7 @@ collections:
                 summary: "{{fields.legende}}"
                 hint: "La première photo sert de couverture. Format paysage conseillé, JPG de moins de 500 Ko."
                 fields:
-                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: image, label: Photo, widget: image, choose_url: false, media_folder: /assets/img/realisations, public_folder: /assets/img/realisations }
                   - { name: legende, label: Légende, widget: string, required: false }
               - { name: aConfirmer, label: "Informations à vérifier", widget: boolean, default: false, required: false, hint: "Repère interne, non affiché sur le site." }
 
@@ -104,7 +104,7 @@ collections:
                 hint: "Glissez les modèles pour changer l'ordre. Les modèles « Nouveau » s'affichent en premier."
                 fields:
                   - { name: nom, label: Nom du modèle, widget: string }
-                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: image, label: Photo, widget: image, choose_url: false, media_folder: /assets/img/modeles, public_folder: /assets/img/modeles }
                   - { name: description, label: Description, widget: text, required: false }
                   - name: options
                     label: Options / matériaux
@@ -130,7 +130,7 @@ collections:
                 hint: "Glissez les modèles pour changer l'ordre. Les modèles « Nouveau » s'affichent en premier."
                 fields:
                   - { name: nom, label: Nom du modèle, widget: string }
-                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: image, label: Photo, widget: image, choose_url: false, media_folder: /assets/img/modeles, public_folder: /assets/img/modeles }
                   - { name: description, label: Description, widget: text, required: false }
                   - name: options
                     label: Options / matériaux
@@ -156,7 +156,7 @@ collections:
                 hint: "Glissez les modèles pour changer l'ordre. Les modèles « Nouveau » s'affichent en premier."
                 fields:
                   - { name: nom, label: Nom du modèle, widget: string }
-                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: image, label: Photo, widget: image, choose_url: false, media_folder: /assets/img/modeles, public_folder: /assets/img/modeles }
                   - { name: description, label: Description, widget: text, required: false }
                   - name: options
                     label: Options / matériaux
@@ -182,7 +182,7 @@ collections:
                 hint: "Glissez les modèles pour changer l'ordre. Les modèles « Nouveau » s'affichent en premier."
                 fields:
                   - { name: nom, label: Nom du modèle, widget: string }
-                  - { name: image, label: Photo, widget: image, choose_url: false }
+                  - { name: image, label: Photo, widget: image, choose_url: false, media_folder: /assets/img/modeles, public_folder: /assets/img/modeles }
                   - { name: description, label: Description, widget: text, required: false }
                   - name: options
                     label: Options / matériaux
